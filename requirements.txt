@@ -1,0 +1,3 @@
+aws-tools
+awscli
+boto3

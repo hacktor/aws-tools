@@ -1,0 +1,8 @@
+aws-tools:
+  restart: always
+  image: aws-tools
+  hostname: aws-tools
+  command: sh -c "while true; do sleep 60; done"
+  volumes:
+    - "~/.aws:/root/.aws"
+    - "~/src:/opt/app/src"
