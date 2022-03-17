@@ -2,6 +2,7 @@ variables:
   PROJECT_NAME: aws-tools
   IMAGE_NAME: aws-tools
   GIT_STRATEGY: clone
+  NAMESPACE: dev
 
 
 stages:
