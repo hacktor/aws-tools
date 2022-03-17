@@ -1,0 +1,65 @@
+variables:
+  PROJECT_NAME: aws-tools
+  IMAGE_NAME: aws-tools
+  GIT_STRATEGY: clone
+
+
+stages:
+  - build
+  - test
+  - push
+
+
+# JOB: Builds an application image
+# TRIGGER: trigger or new tag
+# RUNNER: image_builder
+# SYSTEMS: ci-server, local registry on ci-server
+docker_build:
+  stage: build
+  tags:
+    - image_builder
+  script:
+    - docker build --force-rm --no-cache -t $RC_REGISTRY/$NAMESPACE/$IMAGE_NAME:$CI_COMMIT_TAG .
+  rules:
+    - if: '$CI_COMMIT_TAG && ($CI_COMMIT_TAG =~ /^[0-9]+\.[0-9]+\.[0-9]+(rc|)$/)'
+      when: on_success
+    - when: never
+
+
+# JOB: Test an application image
+# TRIGGER: new tag
+# RUNNER: image_builder
+# SYSTEMS: ci-server, local registry on ci-server
+image_test:
+  stage: test
+  tags:
+    - image_builder
+  script:
+    - trivy -q image $RC_REGISTRY/$NAMESPACE/$IMAGE_NAME:$CI_COMMIT_TAG
+  rules:
+    - if: '$CI_COMMIT_TAG && ($CI_COMMIT_TAG =~ /^[0-9]+\.[0-9]+\.[0-9]+(rc|)$/)'
+      when: on_success
+    - when: never
+
+
+# JOB: Pushes application image to PROD REGISTRY
+# TRIGGER: new tag
+# RUNNER: image_builder
+# SYSTEMS: ci-server, local registry on ci-server
+docker_push_prod:
+  stage: push
+  needs:
+    - job: docker_build
+  tags:
+    - image_builder
+  script:
+    - docker login -u $PRD_REGISTRY_USER -p $PRD_REGISTRY_PASSWORD $PRD_REGISTRY
+    - echo "Tagging and pushing image $IMAGE_NAME:$CI_COMMIT_TAG to $PRD_REGISTRY/$NAMESPACE"
+    - docker tag $RC_REGISTRY/$NAMESPACE/$IMAGE_NAME:$CI_COMMIT_TAG $PRD_REGISTRY/$NAMESPACE/$IMAGE_NAME:$CI_COMMIT_TAG
+    - docker push $PRD_REGISTRY/$NAMESPACE/$IMAGE_NAME:$CI_COMMIT_TAG
+    - echo "cleanup image"
+    - docker rmi $PRD_REGISTRY/$NAMESPACE/$IMAGE_NAME:$CI_COMMIT_TAG
+  rules:
+    - if: '$CI_COMMIT_TAG && ($CI_COMMIT_TAG =~ /^[0-9]+\.[0-9]+\.[0-9]+$/)'
+      when: on_success
+    - when: never
