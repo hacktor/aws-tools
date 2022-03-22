@@ -7,4 +7,4 @@ aws-tools:
     - "~/.aws:/root/.aws"
     - "~/src:/opt/app/src"
   env_file:
-    - env.aws
+    - env.dev
