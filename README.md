@@ -30,3 +30,9 @@ docker exec -it aws-tools_aws-tools_1 bash
 root@aws-tools:/opt/app# cdk --version
 2.16.0 (build 4c77925)
 ```
+
+### Or use the pre-build image from docker.io
+
+```bash
+docker pull hacktor/aws-tools
+```
