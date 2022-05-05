@@ -1,4 +1,6 @@
 aws-tools
 aws-cdk-lib
+aws-sam-cli
 boto3
+cdk
 git-remote-codecommit
