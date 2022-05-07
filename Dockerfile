@@ -14,7 +14,7 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-RUN apt install -y python3 python3-pip ca-certificates curl zip git
+RUN apt install -y python3 python3-distutils python3-pip libexpat1 ca-certificates curl zip git
 RUN curl -sL https://deb.nodesource.com/setup_17.x | bash - && apt install -yq nodejs build-essential
 RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o /tmp/awscliv2.zip && \
     cd /tmp && \
