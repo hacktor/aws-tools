@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM ubuntu:jammy
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONIOENCODING=UTF-8
@@ -13,9 +13,10 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && \
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
+ENV PATH /usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/bin:/sbin
 
 RUN apt install -y python3 python3-distutils python3-pip libexpat1 ca-certificates curl zip git
-RUN curl -sL https://deb.nodesource.com/setup_17.x | bash - && apt install -yq nodejs build-essential
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && apt install -yq nodejs build-essential
 RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o /tmp/awscliv2.zip && \
     cd /tmp && \
     unzip awscliv2.zip && \
