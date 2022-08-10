@@ -2,6 +2,7 @@ aws-tools:
   restart: always
   image: aws-tools
   hostname: aws-tools
+  container_name: awt
   command: sh -c "while true; do sleep 60; done"
   volumes:
     - "~/.aws:/root/.aws"
