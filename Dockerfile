@@ -15,7 +15,7 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 ENV PATH /usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/bin:/sbin
 
-RUN apt install -y python3 python3-distutils python3-pip libexpat1 ca-certificates curl zip git
+RUN apt install -y python3 python3-distutils python3-pip libexpat1 ca-certificates curl zip git vim.tiny
 RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && apt install -yq nodejs build-essential
 RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o /tmp/awscliv2.zip && \
     cd /tmp && \
@@ -24,6 +24,7 @@ RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o /tmp/awscli
     rm awscliv2.zip
 
 COPY requirements.txt /tmp/
+COPY sleep.sh /bin/sleep.sh
 
 RUN npm install -g aws-cdk && \
     pip install -r /tmp/requirements.txt
